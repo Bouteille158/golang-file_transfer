@@ -11,17 +11,26 @@ import (
 )
 
 var payloadFolder = "./payload/"
-
-// var payloadFileName = "loremipsum.txt"
-// var payloadFileName = "textfile"
-var payloadFileName = "IMG_4905.jpg"
-
 var packetSize = 1024
+var serverAddress = "localhost:8080"
 
 func main() {
+	files := []string{
+		"loremipsum.txt",
+		"text_file.txt",
+		"IMG_4905.jpg",
+	}
+
+	for _, file := range files {
+		fmt.Printf("Sending %s\n", file)
+		sendFile(file)
+	}
+}
+
+func sendFile(filename string) {
 	fmt.Println("Launched client")
 
-	file, err := os.Open(payloadFolder + payloadFileName)
+	file, err := os.Open(payloadFolder + filename)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -42,7 +51,7 @@ func main() {
 	fmt.Printf("Size: %d\n", size)
 	fmt.Printf("Extension: %s\n", fileExtension)
 
-	conn, err := net.Dial("tcp", "localhost:8080")
+	conn, err := net.Dial("tcp", serverAddress)
 	if err != nil {
 		fmt.Println(err)
 		return
