@@ -4,6 +4,7 @@ import (
 	"encoding/binary"
 	"fmt"
 	"log"
+	"math/rand"
 	"net"
 	"os"
 	"time"
@@ -63,7 +64,7 @@ func handleConnection(conn net.Conn) {
 	payloadSize := int64(binary.BigEndian.Uint64(payloadSizeBytes))
 	fmt.Printf("Payload size: %d\n", payloadSize)
 
-	outputFileName := time.Now().Format("2006-01-02_15-04-05") + "." + string(fileExtensionBytes)
+	outputFileName := time.Now().Format("2006-01-02_15-04-05") + "_" + randomString(10) + "." + string(fileExtensionBytes)
 
 	// Create output folder if it doesn't exist
 	if _, err := os.Stat(outputFolder); os.IsNotExist(err) {
@@ -103,4 +104,12 @@ func handleConnection(conn net.Conn) {
 	fmt.Println("\nDone reading payload")
 	conn.Write([]byte("I'm done"))
 
+}
+
+func randomString(length int) string {
+	bytes := make([]byte, length)
+	for i := 0; i < length; i++ {
+		bytes[i] = byte(rand.Intn(26) + 97) // Génère un nombre aléatoire entre 97 ('a') et 122 ('z')
+	}
+	return string(bytes)
 }
