@@ -15,15 +15,15 @@ var packetSize = 1024
 var serverAddress = "localhost:8080"
 
 func main() {
-	files := []string{
-		"loremipsum.txt",
-		"text_file.txt",
-		"IMG_4905.jpg",
+	files, err := os.ReadDir(payloadFolder)
+	if err != nil {
+		fmt.Println(err)
+		return
 	}
 
 	for _, file := range files {
 		fmt.Printf("Sending %s\n", file)
-		sendFile(file)
+		sendFile(file.Name())
 	}
 }
 
